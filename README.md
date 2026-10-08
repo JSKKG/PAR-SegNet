@@ -1,5 +1,7 @@
 # PAR-SegNet
+## Architecture
 
+![PAR-SegNet Architecture](PAR-SegNet.png)
 **Official implementation of PAR-SegNet: Pairwise Anatomical Relation Modeling Network for Fetal Head and Pubic Symphysis Segmentation in Intrapartum Ultrasound.**
 
 ## Overview
