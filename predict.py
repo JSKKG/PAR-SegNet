@@ -55,14 +55,14 @@ def main():
             in_ch=3,
             out_ch=3
         )
-    state_dict = torch.load(f"/root/PS-FH-MICCAI23/8/UNet/model/fold0/{ckpt}")
+    state_dict = torch.load(f"./model/fold0/{ckpt}")
     model.load_state_dict(state_dict)
     print(f"Loaded model: {ckpt}")
     model.to(device)
 
     tf_val = JointTransform2D(img_size=256, low_img_size=128, ori_size=256,
                               crop=None, p_flip=0.0, color_jitter_params=None, long_mask=True)
-    root_path = Path('/root/PS-FH-MICCAI23/8/UNet/testdataset')
+    root_path = Path('./testdataset')
 
    
     image_files_list = sorted([f for f in os.listdir(root_path / "image_mha") if f.endswith('.mha')])
@@ -72,13 +72,13 @@ def main():
     label_files = np.array([(root_path / Path("label_mha") / Path(str(i).zfill(5) + '.mha')) for i in range(start_idx, end_idx + 1)])
 
     
-    test_txt_path = "/root/PS-FH-MICCAI23/8/UNet/test.txt"
+    test_txt_path = "./test.txt"
     if not os.path.exists(test_txt_path):
         raise FileNotFoundError(f"Test file not found at: {test_txt_path}")
     with open(test_txt_path, "r") as file:
         lines = file.readlines()
-    test_index = [int(line.strip()) for line in lines]  # 读取文件名
-    test_index = [i - start_idx for i in test_index if start_idx <= i <= end_idx]  # 过滤并转换为偏移量
+    test_index = [int(line.strip()) for line in lines]  
+    test_index = [i - start_idx for i in test_index if start_idx <= i <= end_idx]  
     print(f"Number of test samples: {len(test_index)}")
     db_test = FetalDataset(transform=tf_val,
                            image_paths=[image_files[i] for i in test_index],
