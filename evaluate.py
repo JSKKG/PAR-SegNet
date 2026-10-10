@@ -376,7 +376,7 @@ if __name__ == "__main__":
     preds_dir = f"./pred" 
     truths_dir = f"./gt" 
     fix = f"./model/fold{i}/xxx.pth" 
-    output_path = f"./model/fold{i}/result.json"
+    output_path = "./result.json"
     # ==========================================
 
     if not os.path.exists(preds_dir):
@@ -388,6 +388,6 @@ if __name__ == "__main__":
         print(f"pred_ima: {preds_dir}")
         print(f"save to: {output_path}")
         
-        Evaluation(preds_dir, truths_dir, output_path, fix).process()
+        Evaluation(preds_dir, truths_dir, output_path, fix=None).process()
         
         print("评价完成！")
