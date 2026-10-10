@@ -1,0 +1,37 @@
+# Python cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Datasets
+/data/
+/datasets_raw/
+*.mha
+*.nii
+*.nii.gz
+
+# Model weights
+checkpoints/
+weights/
+*.pth
+*.pt
+*.ckpt
+
+# Logs and experiment outputs
+runs/
+logs/
+outputs/
+results/
+
+# System files
+.DS_Store
+Thumbs.db
