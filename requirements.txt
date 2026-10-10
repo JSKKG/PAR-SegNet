@@ -9,3 +9,5 @@ pandas
 batchgenerators
 einops
 tqdm
+scipy
+medpy
