@@ -59,8 +59,8 @@ The datasets used in this study are publicly available through Zenodo.
 - Number of images: 4,000.
 - Purpose: Model development and validation.
 - Image format: MetaImage (`.mha`).
-- Image dimensions: \(3 \times 256 \times 256\).
-- Label dimensions: \(256 \times 256\).
+- Image dimensions: \(3 * 256 * 256\).
+- Label dimensions: \(256 * 256\).
 
 Dataset: [FH-PS-AOP Challenge Training Set — Zenodo](https://doi.org/10.5281/zenodo.7851339)
 
@@ -115,7 +115,7 @@ The experiments reported in the manuscript were conducted using:
 - **PyTorch:** 1.13.1
 - **GPU:** NVIDIA GeForce RTX 4090
 - **GPU memory:** 24 GB
-- **Input resolution:** \(256 \times 256\)
+- **Input resolution:** \(256 * 256\)
 - **Batch size:** 8
 
 The packages required by the current implementation are listed in `requirements.txt`.
@@ -150,8 +150,8 @@ The experimental protocol described in the manuscript is summarized below.
 | Maximum training epochs | 60 |
 | Batch size | 8 |
 | Optimizer | AdamW |
-| Initial learning rate | \(3 \times 10^{-4}\) |
-| Weight decay | \(3 \times 10^{-5}\) |
+| Initial learning rate | \(3 * 10^{-4}\) |
+| Weight decay | \(3 * 10^{-5}\) |
 | Learning-rate schedule | Polynomial decay, power 0.9 |
 | Training objective | \(0.5\,\mathcal{L}_{CE} + 0.5\,\mathcal{L}_{DC}\) |
 | Model selection | Lowest mean validation Dice loss among evaluated checkpoints |
