@@ -89,47 +89,51 @@ def main():
 
     with torch.no_grad():
         model.eval()
-        for batch_idx, (datapack) in tqdm(enumerate(testloader)):
-                imgs = datapack['image'].to(dtype=torch.float32, device='cuda')
-                masks = datapack['label'].to(dtype=torch.float32, device='cuda')  # (b,1,256,256)
-                preds = model(imgs)
-                for i in range(preds.shape[0]):
-                    pred = preds[i].argmax(dim=0).detach().cpu().numpy()
-                    label = masks[i].squeeze(0).long().detach().cpu().numpy()
-                    # pred = sitk.GetArrayFromImage(resize_image_itk(sitk.GetImageFromArray(pred), (256, 256)))
-                    # label = sitk.GetArrayFromImage(resize_image_itk(sitk.GetImageFromArray(label), (256, 256)))
-                    cv2.imwrite(f"./pred/{batch_idx * 4 + i + 1}.png", pred)
-                    cv2.imwrite(f"./gt/{batch_idx * 4 + i + 1}.png", label)
+
+        for batch_idx, datapack in tqdm(enumerate(testloader)):
+            imgs = datapack['image'].to(dtype=torch.float32, device='cuda')
+            masks = datapack['label'].to(dtype=torch.float32, device='cuda')
+            preds = model(imgs)
+
+            for i in range(preds.shape[0]):
+                # Obtain class-index masks: 0, 1, 2
+                pred = (
+                    preds[i]
+                    .argmax(dim=0)
+                    .detach()
+                    .cpu()
+                    .numpy()
+                    .astype(np.uint8)
+                )
+
+                label = (
+                    masks[i]
+                    .squeeze(0)
+                    .long()
+                    .detach()
+                    .cpu()
+                    .numpy()
+                    .astype(np.uint8)
+                )
+
+                # Use matching numeric filenames
+                idx = batch_idx * testloader.batch_size + i + 1
+
+                pred_path = f"./pred/{idx}.png"
+                gt_path = f"./gt/{idx}.png"
+
+                if pred.shape != label.shape:
+                    raise ValueError(
+                        f"Shape mismatch: pred={pred.shape}, gt={label.shape}"
+                    )
+
+                if not cv2.imwrite(pred_path, pred):
+                    raise IOError(f"Failed to save prediction: {pred_path}")
+
+                if not cv2.imwrite(gt_path, label):
+                    raise IOError(f"Failed to save ground truth: {gt_path}")
                 
-        # for batch_idx, (datapack) in tqdm(enumerate(testloader)):
-        #     imgs = datapack['image'].to(dtype=torch.float32, device='cuda')
-        #     masks = datapack['label'].long().to(device)
-        #     preds = model(imgs)
-        #     preds = torch.softmax(preds, dim=1)
-        #     preds = torch.argmax(preds, dim=1)
-        #     print(f"Input shape: {imgs.shape}, Preds shape: {preds.shape}, Masks shape: {masks.shape}")
-        #     print(f"Preds min/max: {preds.min().item()}, {preds.max().item()}")
-        #     print(f"Masks min/max: {masks.min().item()}, {masks.max().item()}")
-        #     for i in range(preds.shape[0]):
-        #         pred = preds[i].detach().cpu().numpy()
-        #         label = masks[i].squeeze(0).long().detach().cpu().numpy()
-        #         print(np.unique(label, return_counts=True))
-        #         print("Pred classes:", np.unique(pred))
-        #         print("GT classes:", np.unique(label))
-        #         # print(f"Image {batch_idx*testloader.batch_size+i+1}: Dice = {dice:.4f}")
-        #         print(f"Pred min/max before save: {pred.min()}, {pred.max()}")
-        #         print(f"Label min/max before save: {label.min()}, {label.max()}")
-    
-        #         pred_normalized = (pred * 127).clip(0, 255).astype(np.uint8)
-        #         pred_normalized = np.zeros_like(pred, dtype=np.uint8)
-        #         pred_normalized[pred == 1] = 127 
-        #         pred_normalized[pred == 2] = 255  
-        #         label_normalized = np.zeros_like(label, dtype=np.uint8)
-        #         label_normalized[label == 1] = 127 
-        #         label_normalized[label == 2] = 255  
-        #         idx = batch_idx * testloader.batch_size + i + 1
-        #         cv2.imwrite(f"./pred/{idx}.png", pred_normalized)
-        #         cv2.imwrite(f"./gt/{idx}.png", label_normalized)
+       
 
 if __name__ == '__main__':
     main()
