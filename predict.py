@@ -7,7 +7,7 @@ from tqdm import tqdm
 from torch.utils.data import Dataset, DataLoader
 import SimpleITK as sitk
 from datasets.dataset import JointTransform2D, correct_dims
-from models.par_segnet import U_Net
+from models.par_segnet import PARSegNet
 
 
 class FetalDataset(Dataset):
@@ -49,13 +49,13 @@ def main():
     os.makedirs("./pred", exist_ok=True)
     os.makedirs("./gt", exist_ok=True)
 
-    # 加载模型权重
-    ckpt = "epoch_46dice_0.016065182.pth"
-    model = U_Net(
+    
+    ckpt = "xxxx.pth"
+    model = PARSegNet(
             in_ch=3,
             out_ch=3
         )
-    state_dict = torch.load(f"/root/PS-FH-MICCAI23/8/UNet/newmodelthree/fold0/{ckpt}")
+    state_dict = torch.load(f"/root/PS-FH-MICCAI23/8/UNet/model/fold0/{ckpt}")
     model.load_state_dict(state_dict)
     print(f"Loaded model: {ckpt}")
     model.to(device)
@@ -64,14 +64,14 @@ def main():
                               crop=None, p_flip=0.0, color_jitter_params=None, long_mask=True)
     root_path = Path('/root/PS-FH-MICCAI23/8/UNet/testdataset')
 
-    # 动态确定文件范围
+   
     image_files_list = sorted([f for f in os.listdir(root_path / "image_mha") if f.endswith('.mha')])
-    start_idx = int(image_files_list[0].replace('.mha', ''))  # 例如 03744
-    end_idx = int(image_files_list[-1].replace('.mha', ''))  # 例如 03763
+    start_idx = int(image_files_list[0].replace('.mha', '')) 
+    end_idx = int(image_files_list[-1].replace('.mha', ''))  
     image_files = np.array([(root_path / Path("image_mha") / Path(str(i).zfill(5) + '.mha')) for i in range(start_idx, end_idx + 1)])
     label_files = np.array([(root_path / Path("label_mha") / Path(str(i).zfill(5) + '.mha')) for i in range(start_idx, end_idx + 1)])
 
-    # 读取 test.txt
+    
     test_txt_path = "/root/PS-FH-MICCAI23/8/UNet/test.txt"
     if not os.path.exists(test_txt_path):
         raise FileNotFoundError(f"Test file not found at: {test_txt_path}")
@@ -100,7 +100,7 @@ def main():
                     # label = sitk.GetArrayFromImage(resize_image_itk(sitk.GetImageFromArray(label), (256, 256)))
                     cv2.imwrite(f"./pred/{batch_idx * 4 + i + 1}.png", pred)
                     cv2.imwrite(f"./gt/{batch_idx * 4 + i + 1}.png", label)
-                    
+                
         # for batch_idx, (datapack) in tqdm(enumerate(testloader)):
         #     imgs = datapack['image'].to(dtype=torch.float32, device='cuda')
         #     masks = datapack['label'].long().to(device)
@@ -122,11 +122,11 @@ def main():
     
         #         pred_normalized = (pred * 127).clip(0, 255).astype(np.uint8)
         #         pred_normalized = np.zeros_like(pred, dtype=np.uint8)
-        #         pred_normalized[pred == 1] = 127 # 胎头
-        #         pred_normalized[pred == 2] = 255  # 耻骨
+        #         pred_normalized[pred == 1] = 127 
+        #         pred_normalized[pred == 2] = 255  
         #         label_normalized = np.zeros_like(label, dtype=np.uint8)
-        #         label_normalized[label == 1] = 127  # 胎头
-        #         label_normalized[label == 2] = 255  # 耻骨
+        #         label_normalized[label == 1] = 127 
+        #         label_normalized[label == 2] = 255  
         #         idx = batch_idx * testloader.batch_size + i + 1
         #         cv2.imwrite(f"./pred/{idx}.png", pred_normalized)
         #         cv2.imwrite(f"./gt/{idx}.png", label_normalized)
