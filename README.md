@@ -1,8 +1,8 @@
 # PAR-SegNet: Pairwise Anatomical Relation Modeling Network for Fetal Head and Pubic Symphysis Segmentation in Intrapartum Ultrasound
 
-Official code repository for **PAR-SegNet**, a U-Net-based framework for joint segmentation of the pubic symphysis (PS) and fetal head (FH) in intrapartum ultrasound (IUS).
+PAR-SegNet is a U-Net-based framework for joint segmentation of the pubic symphysis (PS) and fetal head (FH) in intrapartum ultrasound (IUS).
 
-PAR-SegNet is centered on **Pairwise Anatomical Relation Modeling (PARM)**, which learns feature-level relationships between PS-oriented and FH-oriented representations and uses the learned relations to refine the two representations through separate paths. Enhanced Feature Recalibration (EFR) and Adaptive Multi-scale Context Aggregation (AMCA) are incorporated to improve feature reliability and multi-scale contextual representation.
+The network is centered on **Pairwise Anatomical Relation Modeling (PARM)**, which learns feature-level relationships between PS-oriented and FH-oriented representations and uses the learned relations to refine the two representations through separate paths. Enhanced Feature Recalibration (EFR) and Adaptive Multi-scale Context Aggregation (AMCA) are incorporated to improve feature reliability and multi-scale contextual representation.
 
 ## Overview
 
@@ -59,8 +59,8 @@ The datasets used in this study are publicly available through Zenodo.
 - Number of images: 4,000.
 - Purpose: Model development and validation.
 - Image format: MetaImage (`.mha`).
-- Image dimensions: \(3 * 256 * 256\).
-- Label dimensions: \(256 * 256\).
+- Image dimensions: 3 × 256 × 256.
+- Label dimensions: 256 × 256.
 
 Dataset: [FH-PS-AOP Challenge Training Set — Zenodo](https://doi.org/10.5281/zenodo.7851339)
 
@@ -115,7 +115,7 @@ The experiments reported in the manuscript were conducted using:
 - **PyTorch:** 1.13.1
 - **GPU:** NVIDIA GeForce RTX 4090
 - **GPU memory:** 24 GB
-- **Input resolution:** \(256 * 256\)
+- **Input resolution:** 256 × 256
 - **Batch size:** 8
 
 The packages required by the current implementation are listed in `requirements.txt`.
@@ -150,10 +150,10 @@ The experimental protocol described in the manuscript is summarized below.
 | Maximum training epochs | 60 |
 | Batch size | 8 |
 | Optimizer | AdamW |
-| Initial learning rate | \(3 * 10^{-4}\) |
-| Weight decay | \(3 * 10^{-5}\) |
+| Initial learning rate | 3 × 10⁻⁴ |
+| Weight decay | 3 × 10⁻⁵ |
 | Learning-rate schedule | Polynomial decay, power 0.9 |
-| Training objective | \(0.5\,\mathcal{L}_{CE} + 0.5\,\mathcal{L}_{DC}\) |
+| Training objective | 0.5 × CE loss + 0.5 × DC loss |
 | Model selection | Lowest mean validation Dice loss among evaluated checkpoints |
 
 Validation was performed from epoch 35 onward, and the selected checkpoint was evaluated on the separate PSFHS dataset.
@@ -210,28 +210,11 @@ PAR-SegNet was evaluated on the PSFHS dataset using five independent training ru
 
 | Metric | PAR-SegNet |
 |---|---:|
-| PS Dice Similarity Coefficient (DSC) | \(86.53 \pm 0.42\%\) |
-| FH Dice Similarity Coefficient (DSC) | \(93.11 \pm 0.29\%\) |
-| Overall DSC | \(92.87 \pm 0.17\%\) |
-| AoP estimation error (\(\Delta\mathrm{AoP}\)) | \(8.02 \pm 0.21^\circ\) |
+| PS Dice Similarity Coefficient (DSC) | 86.53 ± 0.42% |
+| FH Dice Similarity Coefficient (DSC) | 93.11 ± 0.29% |
+| Overall DSC | 92.87 ± 0.17% |
+| AoP estimation error (ΔAoP) | 8.02 ± 0.21° |
 
 Results are reported as mean ± standard deviation across five runs. The overall DSC and AoP error summarize segmentation overlap and downstream geometric estimation performance, respectively.
 
 The manuscript additionally reports comparisons with representative CNN-, Transformer-, state-space-model-, and KAN-based segmentation methods, together with module ablations and computational efficiency measurements.
-
-## Citation
-
-If you use this code in your research, please cite the associated manuscript. The bibliographic information can be updated when the manuscript is published.
-
-**Manuscript title:**  
-PAR-SegNet: Pairwise Anatomical Relation Modeling Network for Fetal Head and Pubic Symphysis Segmentation in Intrapartum Ultrasound
-
-**Authors:** Kaige Jiang, Li Zhang, Ming Jing, Cong Wang, and Jingrun Zi.
-
-## License
-
-An explicit open-source license has not yet been specified for this repository. Please check the repository for an applicable license before reusing or redistributing the code.
-
-## Acknowledgments
-
-The authors used ChatGPT (OpenAI) to assist with language editing and manuscript formatting. All generated content was reviewed and revised by the authors, who take full responsibility for the final manuscript.
