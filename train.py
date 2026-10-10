@@ -9,7 +9,7 @@ from utils import DiceLoss,MyDC,DCloss
 from torch.nn.modules.loss import CrossEntropyLoss
 import torch.nn.functional as F
 import random
-from models.par_segnet import U_Net
+from models.par_segnet import PARSegNet
 import time
 def main():
     seed_value = int(time.time())
