@@ -1,0 +1,11 @@
+numpy
+torch
+torchvision
+SimpleITK
+opencv-python
+scikit-image
+Pillow
+pandas
+batchgenerators
+einops
+tqdm
