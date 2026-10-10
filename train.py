@@ -4,7 +4,7 @@ import torch
 import torch.utils
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from mydataset import ImageToImage2D, JointTransform2D, correct_dims
+from datasets.dataset import ImageToImage2D, JointTransform2D, correct_dims
 from utils import DiceLoss,MyDC,DCloss
 from torch.nn.modules.loss import CrossEntropyLoss
 import torch.nn.functional as F
